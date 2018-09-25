@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  database:
+    build:
+      context: build/dhis2db
+      dockerfile: Dockerfile   
+  web:
+    build:
+      context: build/dhis2app
+      dockerfile: Dockerfile   
+

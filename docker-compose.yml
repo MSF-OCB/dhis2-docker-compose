@@ -1,0 +1,47 @@
+version: '3.5'
+
+services:
+
+  database:
+    container_name: dhis2-database-${hostname}
+    image: localhost:5000/dhis2-db:${db_image_version}
+    volumes:
+      - type: volume
+        source: dhis2_db_data
+        target: /var/lib/postgresql/data       
+    environment:
+      - POSTGRES_USER=dhis
+      - POSTGRES_DB=dhis
+      - POSTGRES_PASSWORD=dhis
+      - POSTGRES_DB_TARGET=dhis-target
+      - PG_DATA=/var/lib/postgresql/data/pgdata:z
+    restart: always
+    ports:
+      - target: ${db_port_target}
+        published: ${db_port_published}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis"]
+      interval: 30s
+      timeout: 30s
+      retries: 150
+
+  web:
+    container_name: dhis2-web-${hostname}
+    image: localhost:5000/dhis2-web:${web_image_version}
+    environment:
+      - JAVA_OPTS="-Xmx1024m -Xms4000m"
+      - POSTGRES_DB=dhis
+    ports:
+      - target: ${web_port_target}
+        published: ${web_port_published}       
+    restart: always
+    depends_on:
+      - database
+    healthcheck:
+      test: "curl -f http://web:8080"
+      interval: 30s
+      retries: 150
+   
+volumes:
+  dhis2_db_data:
+
