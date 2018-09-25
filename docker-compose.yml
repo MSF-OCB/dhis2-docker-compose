@@ -28,9 +28,14 @@ services:
   web:
     container_name: dhis2-web-${hostname}
     image: localhost:5000/dhis2-web:${web_image_version}
+    volumes:
+      - type: volume
+        source: tomcat_log
+        target: /opt/dhis2/config/logs
     environment:
       - JAVA_OPTS="-Xmx1024m -Xms4000m"
       - POSTGRES_DB=dhis
+      - DHIS2_HOME=/opt/dhis2/config  
     ports:
       - target: ${web_port_target}
         published: ${web_port_published}       
@@ -43,5 +48,6 @@ services:
       retries: 150
    
 volumes:
-  dhis2_db_data:
+    dhis2_db_data:
+    tomcat_log:    
 
