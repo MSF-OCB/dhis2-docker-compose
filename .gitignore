@@ -1,5 +1,5 @@
-# Object file
-*.o
-
-# Ada Library Information
-*.ali
+.env
+*.war
+dhis2app/
+dhis2db/
+build/
