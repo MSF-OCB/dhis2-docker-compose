@@ -8,7 +8,7 @@ services:
     volumes:
       - type: volume
         source: dhis2_db_data
-        target: /var/lib/postgresql/data       
+        target: /var/lib/postgresql/data
     environment:
       - POSTGRES_USER=dhis
       - POSTGRES_DB=dhis
@@ -33,12 +33,12 @@ services:
         source: tomcat_log
         target: /opt/dhis2/config/logs
     environment:
-      - JAVA_OPTS="-Xmx1024m -Xms4000m"
+      - JAVA_OPTS="-XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4000m -XX:PermSize=128m -XX:MaxPermSize=256m"
       - POSTGRES_DB=dhis
-      - DHIS2_HOME=/opt/dhis2/config  
+      - DHIS2_HOME=/opt/dhis2/config
     ports:
       - target: ${web_port_target}
-        published: ${web_port_published}       
+        published: ${web_port_published}
     restart: always
     depends_on:
       - database
@@ -46,8 +46,7 @@ services:
       test: "curl -f http://web:8080"
       interval: 30s
       retries: 150
-   
+
 volumes:
     dhis2_db_data:
-    tomcat_log:    
-
+    tomcat_log:
