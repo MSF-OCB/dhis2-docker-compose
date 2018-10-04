@@ -33,7 +33,7 @@ services:
         source: tomcat_log
         target: /opt/dhis2/config/logs
     environment:
-      - JAVA_OPTS="-XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4000m -XX:PermSize=128m -XX:MaxPermSize=256m"
+      - JAVA_OPTS="-XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4000m"
       - POSTGRES_DB=dhis
       - DHIS2_HOME=/opt/dhis2/config
     ports:
