@@ -33,7 +33,7 @@ services:
         source: tomcat_log
         target: /opt/dhis2/config/logs
     environment:
-      - JAVA_OPTS="-XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx3000m"
+      - JAVA_OPTS=${java_opts}
       - POSTGRES_DB=dhis
       - DHIS2_HOME=/opt/dhis2/config
     ports:
