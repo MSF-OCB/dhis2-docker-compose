@@ -8,4 +8,5 @@ services:
 
 networks:
   reverse-proxy:
-    name: reverse-proxy
+    external:
+      name: reverse-proxy
