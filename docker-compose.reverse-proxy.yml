@@ -1,0 +1,11 @@
+version: '3.5'
+
+services:
+  web:
+    networks:
+      - default
+      - reverse-proxy
+
+networks:
+  reverse-proxy:
+    name: reverse-proxy
