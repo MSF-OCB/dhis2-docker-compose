@@ -17,7 +17,7 @@ services:
       - PG_DATA=/var/lib/postgresql/data/pgdata:z
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h database -p 5432 -d dhis"]
+      test: ["CMD-SHELL", "pg_isready -h database -U dhis -p 5432 -d dhis"]
       interval: 30s
       timeout: 30s
       retries: 150
