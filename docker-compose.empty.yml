@@ -7,7 +7,7 @@ services:
     image: localhost:5000/dhis2-db:${db_image_version}
     volumes:
       - type: volume
-        source: dhis2_db_data
+        source: dhis2_db_data_empty
         target: /var/lib/postgresql/data
     environment:
       - POSTGRES_USER=dhis
@@ -30,7 +30,7 @@ services:
         source: ./apps
         target: /opt/dhis2/config/files/apps
       - type: volume
-        source: tomcat_log
+        source: tomcat_log_empty
         target: /opt/dhis2/config/logs
     environment:
       - JAVA_OPTS=${java_opts}
@@ -48,5 +48,5 @@ services:
       retries: 150
 
 volumes:
-    dhis2_db_data:
-    tomcat_log:
+    dhis2_db_data_empty:
+    tomcat_log_empty:
