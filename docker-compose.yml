@@ -3,47 +3,55 @@ version: '3.5'
 services:
 
   database:
-    container_name: dhis2-database-${hostname}
+    container_name: dhis2-database-${INSTANCE_NAME:?INSTANCE_NAME}
+    env_file: .env
     image: localhost:5000/dhis2-db:${db_image_version}
     volumes:
       - type: volume
         source: dhis2_db_data
         target: /var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=dhis
-      - POSTGRES_DB=dhis
-      - POSTGRES_PASSWORD=dhis
-      - POSTGRES_DB_TARGET=dhis-target
-      - PG_DATA=/var/lib/postgresql/data/pgdata:z
     restart: always
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -h database -U dhis -p 5432 -d dhis"]
+      test: ["CMD-SHELL", "pg_isready -h database -U ${POSTGRES_USER} -p 5432 -d ${POSTGRES_DB}"]
       interval: 30s
       timeout: 30s
       retries: 150
 
-  web:
-    container_name: dhis2-web-${hostname}
-    image: localhost:5000/dhis2-web:${web_image_version}
-    volumes:
-      - type: volume
-        source: tomcat_log
-        target: /opt/dhis2/config/logs
-    environment:
-      - JAVA_OPTS=${java_opts}
-      - POSTGRES_DB=dhis
-      - DHIS2_HOME=/opt/dhis2/config
-    ports:
-      - target: ${web_port_target}
-        published: ${web_port_published}
+  # web:
+  #   container_name: dhis2-web-${hostname}
+  #   image: localhost:5000/dhis2-web:${web_image_version}
+  #   volumes:
+  #     - type: volume
+  #       source: tomcat_log
+  #       target: /opt/dhis2/config/logs
+  #   environment:
+  #     - JAVA_OPTS=${java_opts}
+  #     - POSTGRES_DB=dhis
+  #     - DHIS2_HOME=/opt/dhis2/config
+  #   ports:
+  #     - target: ${web_port_target}
+  #       published: ${web_port_published}
+  #   restart: always
+  #   depends_on:
+  #     - database
+  #   healthcheck:
+  #     test: "curl -f http://web:8080"
+  #     interval: 30s
+  #     retries: 150
+
+  backup-service:
+    image: msf/backupservice
+    env_file: .env
     restart: always
     depends_on:
       - database
-    healthcheck:
-      test: "curl -f http://web:8080"
-      interval: 30s
-      retries: 150
+    volumes:
+      - type: volume
+        source: msfbackups
+        target: /backups
 
 volumes:
     dhis2_db_data:
     tomcat_log:
+    msfbackups:
+      name: msfbackups
