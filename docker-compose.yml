@@ -3,9 +3,9 @@ version: '3.5'
 services:
 
   database:
-    container_name: dhis2-database-${INSTANCE_NAME:?INSTANCE_NAME}
+    container_name: dhis2-db-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
     env_file: .env
-    image: localhost:5000/dhis2-db:${db_image_version}
+    image: ${POSTGRES_IMAGE:-mdillon/postgis:10-alpine}
     volumes:
       - type: volume
         source: dhis2_db_data
@@ -18,7 +18,7 @@ services:
       retries: 150
 
   # web:
-  #   container_name: dhis2-web-${hostname}
+  #   container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE}
   #   image: localhost:5000/dhis2-web:${web_image_version}
   #   volumes:
   #     - type: volume
@@ -52,6 +52,7 @@ services:
 
 volumes:
     dhis2_db_data:
+      name: dhis2_db_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
     tomcat_log:
     msfbackups:
       name: msfbackups
