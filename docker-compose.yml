@@ -5,6 +5,11 @@ services:
   database:
     container_name: dhis2-db-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
     env_file: .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-dhis}
+      - POSTGRES_DB=${POSTGRES_DB:-dhis}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
+      - ENC_PASS=
     image: ${POSTGRES_IMAGE:-mdillon/postgis:10-alpine}
     volumes:
       - type: volume
@@ -17,31 +22,46 @@ services:
       timeout: 30s
       retries: 150
 
-  # web:
-  #   container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE}
-  #   image: localhost:5000/dhis2-web:${web_image_version}
-  #   volumes:
-  #     - type: volume
-  #       source: tomcat_log
-  #       target: /opt/dhis2/config/logs
-  #   environment:
-  #     - JAVA_OPTS=${java_opts}
-  #     - POSTGRES_DB=dhis
-  #     - DHIS2_HOME=/opt/dhis2/config
-  #   ports:
-  #     - target: ${web_port_target}
-  #       published: ${web_port_published}
-  #   restart: always
-  #   depends_on:
-  #     - database
-  #   healthcheck:
-  #     test: "curl -f http://web:8080"
-  #     interval: 30s
-  #     retries: 150
+  web:
+    container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE}
+    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30}
+    env_file: .env
+    volumes:
+      - type: volume
+        source: tomcat_log
+        target: /opt/dhis2/config/logs
+    environment:
+      - JAVA_OPTS=${JAVA_OPTS:--XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4096m -XX:-UseGCOverheadLimit}
+      - DHIS2_HOME=/opt/dhis2/config
+      - POSTGRES_USER=${POSTGRES_USER:-dhis}
+      - POSTGRES_DB=${POSTGRES_DB:-dhis}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
+      - ENC_PASS=
+    ports:
+      - target: 8080
+        published: ${INSTANCE_PORT:-8080}
+    restart: always
+    depends_on:
+      - database
+    healthcheck:
+      test: "curl -f http://web:8080"
+      interval: 30s
+      retries: 150
 
-  backup-service:
+  backup:
     image: msf/backupservice
     env_file: .env
+    environment:
+      - DB_BACKEND=postgres
+      - DB_PORT=5432
+      - DB_USER=${POSTGRES_USER:-dhis}
+      - DB_HOST=database
+      - DB_DB=${POSTGRES_DB:-dhis}
+      - DB_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
+      - ENC_TYPE=${ENC_TYPE:-7z}
+      - TZ=${TZ:-Europe/Brussels}
+      - ENC_PASS=${ENC_PASS:?ENC_PASS}
+      - DUMP_ARGS=${DUMP_ARGS:--c -O -Fp -T aggregated* -T analytics* -T completeness*} 
     restart: always
     depends_on:
       - database
@@ -54,5 +74,6 @@ volumes:
     dhis2_db_data:
       name: dhis2_db_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
     tomcat_log:
+      name: tomcat_log_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
     msfbackups:
-      name: msfbackups
+      name: dhis2_backups_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
