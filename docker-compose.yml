@@ -9,6 +9,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
+      # leave this empty
       - ENC_PASS=
     image: ${POSTGRES_IMAGE:-mdillon/postgis:10-alpine}
     volumes:
@@ -23,7 +24,7 @@ services:
       retries: 150
 
   web:
-    container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE}
+    container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
     image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30}
     env_file: .env
     volumes:
@@ -36,6 +37,7 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
+      # leave this empty
       - ENC_PASS=
     ports:
       - target: 8080
@@ -50,6 +52,7 @@ services:
 
   backup:
     image: msf/backupservice
+    container_name: dhis2-bkp-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
     env_file: .env
     environment:
       - DB_BACKEND=postgres
