@@ -10,10 +10,10 @@ services:
         source: dhis2_db_data
         target: /var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=dhis
-      - POSTGRES_DB=dhis
-      - POSTGRES_PASSWORD=dhis
-      - POSTGRES_DB_TARGET=dhis-target
+      - POSTGRES_USER=${postgres_user}
+      - POSTGRES_DB=${postgres_db}
+      - POSTGRES_PASSWORD=${postgres_pass}
+      - POSTGRES_DB_TARGET=${postgres_db_target}
       - PG_DATA=/var/lib/postgresql/data/pgdata:z
     restart: always
     healthcheck:
@@ -31,7 +31,7 @@ services:
         target: /opt/dhis2/config/logs
     environment:
       - JAVA_OPTS=${java_opts}
-      - POSTGRES_DB=dhis
+      - POSTGRES_DB=${postgres_db}
       - DHIS2_HOME=/opt/dhis2/config
     ports:
       - target: ${web_port_target}
