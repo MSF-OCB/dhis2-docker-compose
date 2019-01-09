@@ -4,7 +4,8 @@ services:
 
   database:
     container_name: dhis2-db-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
-    env_file: .env
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
@@ -12,6 +13,8 @@ services:
       # leave this empty
       - ENC_PASS=
     image: ${POSTGRES_IMAGE:-mdillon/postgis:10-alpine}
+    labels:
+      - "org.msf.description=dhis2-database"
     volumes:
       - type: volume
         source: dhis2_db_data
@@ -25,8 +28,11 @@ services:
 
   web:
     container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
-    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30}
-    env_file: .env
+    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30_alpine}
+    labels:
+      - "org.msf.description=dhis2-web"
+    env_file:
+      - .env
     volumes:
       - type: volume
         source: tomcat_log
@@ -51,9 +57,12 @@ services:
       retries: 150
 
   backup:
-    image: msf/backupservice
+    image: msfocbehealth/backup:latest
+    labels:
+      - "org.msf.description=backup"
     container_name: dhis2-bkp-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
-    env_file: .env
+    env_file:
+      - .env
     environment:
       - DB_BACKEND=postgres
       - DB_PORT=5432
