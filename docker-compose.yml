@@ -28,7 +28,7 @@ services:
 
   web:
     container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
-    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30}
+    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30_alpine}
     labels:
       - "org.msf.description=dhis2-web"
     env_file:
@@ -53,8 +53,8 @@ services:
       - database
     healthcheck:
       test: "curl -f http://web:8080"
-      interval: 30s
-      retries: 150
+      interval: 1m
+      retries: 10
 
   backup:
     image: msfocbehealth/backup:latest
