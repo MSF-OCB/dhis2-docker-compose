@@ -1,4 +1,4 @@
-.env
+*.env
 *.war
 dhis2app/
 dhis2db/

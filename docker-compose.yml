@@ -3,16 +3,15 @@ version: '3.5'
 services:
 
   database:
-    container_name: dhis2-db-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
-    env_file:
-      - .env
+    env_file: .env
+    container_name: dhis2-db-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
     environment:
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
       # leave this empty
       - ENC_PASS=
-    image: ${POSTGRES_IMAGE:-mdillon/postgis:10-alpine}
+    image: ${POSTGRES_IMAGE:-msfocbehealth/dhis2-database:10-alpine}
     labels:
       - "org.msf.description=dhis2-database"
     volumes:
@@ -27,7 +26,7 @@ services:
       retries: 150
 
   web:
-    container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
+    container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
     image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30_alpine}
     labels:
       - "org.msf.description=dhis2-web"
@@ -60,7 +59,7 @@ services:
     image: msfocbehealth/backup:latest
     labels:
       - "org.msf.description=backup"
-    container_name: dhis2-bkp-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:-prod}
+    container_name: dhis2-bkp-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
     env_file:
       - .env
     environment:
@@ -86,8 +85,8 @@ services:
 
 volumes:
     dhis2_db_data:
-      name: dhis2_db_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
+      name: dhis2_db_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
     tomcat_log:
-      name: tomcat_log_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
+      name: tomcat_log_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
     msfbackups:
-      name: dhis2_backups_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:-prod}
+      name: dhis2_backups_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
