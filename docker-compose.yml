@@ -30,8 +30,16 @@ services:
     image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30_alpine}
     labels:
       - "org.msf.description=dhis2-web"
+      - "traefik.docker.network=web"
+      - "traefik.backend=dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}"
+      - "traefik.frontend.rule=Host:${FRONTEND_RULE}"
+      - "traefik.enable=true"
+      - "traefik.port=8080"
     env_file:
       - .env
+    networks:
+      - web
+      - default
     volumes:
       - type: volume
         source: tomcat_log
@@ -90,3 +98,7 @@ volumes:
       name: tomcat_log_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
     msfbackups:
       name: dhis2_backups_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
+
+networks:
+  web:
+    external: true
