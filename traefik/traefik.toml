@@ -15,7 +15,6 @@ defaultEntryPoints = ["https","http"]
 [retry]
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-domain = "hmis.msf.be"
 watch = true
 exposedByDefault = false
 
