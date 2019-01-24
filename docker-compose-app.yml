@@ -1,0 +1,14 @@
+version: "3.5"
+
+services:
+    web:
+        volumes:
+            - type: volume
+              source: dhis2_app
+              target: /opt/dhis2/config/apps/
+        env_file:
+            - .env
+volumes:
+    dhis2_app:
+        name: dhis2_apps_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
+
