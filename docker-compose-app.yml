@@ -5,7 +5,7 @@ services:
         volumes:
             - type: volume
               source: dhis2_app
-              target: /opt/dhis2/config/apps/
+              target: /opt/dhis2/config/files/apps/
         env_file:
             - .env
 volumes:
