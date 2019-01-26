@@ -27,12 +27,12 @@ services:
 
   web:
     container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
-    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:2.30_alpine}
+    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:8.5.30-3fa0a4a7}
     labels:
       - "org.msf.description=dhis2-web"
       - "traefik.docker.network=web"
       - "traefik.backend=dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}"
-      - "traefik.frontend.rule=Host:${FRONTEND_RULE}"
+      - "traefik.frontend.rule=Host:${FRONTEND_RULE:-none}"
       - "traefik.enable=true"
       - "traefik.port=8080"
     env_file:
