@@ -71,6 +71,7 @@ services:
     env_file:
       - .env
     environment:
+      - BACKUP_NAME=${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
       - DB_BACKEND=postgres
       - DB_PORT=5432
       - DB_USER=${POSTGRES_USER:-dhis}
