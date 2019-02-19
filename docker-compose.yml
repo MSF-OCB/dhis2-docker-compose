@@ -9,8 +9,8 @@ services:
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
-      # leave this empty
       - ENC_PASS=
+    command: ["-c", "max_connections=${max_connections}", "-c", "shared_buffers=${shared_buffers}", "-c", "effective_cache_size=${effective_cache_size}", "-c", "maintenance_work_mem=${maintenance_work_mem}", "-c", "checkpoint_completion_target=${checkpoint_completion_target}", "-c", "wal_buffers=${wal_buffers}", "-c", "default_statistics_target=${default_statistics_target}", "-c", "random_page_cost=${random_page_cost}", "-c", "effective_io_concurrency=${effective_io_concurrency}", "-c", "work_mem=${work_mem}", "-c", "min_wal_size=${min_wal_size}", "-c", "max_wal_size=${max_wal_size}", "-c", "max_worker_processes=${max_worker_processes}", "-c", "max_parallel_workers_per_gather=${max_parallel_workers_per_gather}", "-c", "max_parallel_workers=${max_parallel_workers}"]
     image: ${POSTGRES_IMAGE:-msfocbehealth/dhis2-database:10-alpine}
     labels:
       - "org.msf.description=dhis2-database"
@@ -27,7 +27,7 @@ services:
 
   web:
     container_name: dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
-    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:8.5.30-3fa0a4a7}
+    image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:8.5.30-20f46674-deb}
     labels:
       - "org.msf.description=dhis2-web"
       - "traefik.docker.network=web"
