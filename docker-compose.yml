@@ -45,7 +45,7 @@ services:
         source: tomcat_log
         target: /opt/dhis2/config/logs
     environment:
-      - JAVA_OPTS=${JAVA_OPTS:--XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4096m -XX:-UseGCOverheadLimit}
+      - JAVA_OPTS=${JAVA_OPTS:--XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4096m -XX:-UseGCOverheadLimit -XX:MaxHeapFreeRatio=30 -XX:MinHeapFreeRatio=10}
       - DHIS2_HOME=/opt/dhis2/config
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
