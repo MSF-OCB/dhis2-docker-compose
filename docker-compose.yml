@@ -18,6 +18,12 @@ services:
       - type: volume
         source: dhis2_db_data
         target: /var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${postgres_user}
+      - POSTGRES_DB=${postgres_db}
+      - POSTGRES_PASSWORD=${postgres_pass}
+      - POSTGRES_DB_TARGET=${postgres_db_target}
+      - PG_DATA=/var/lib/postgresql/data/pgdata:z
     restart: always
     healthcheck:
       test: "pg_isready -h database -U ${POSTGRES_USER:-dhis} -p 5432 -d ${POSTGRES_DB:-dhis}"
@@ -45,7 +51,8 @@ services:
         source: tomcat_log
         target: /opt/dhis2/config/logs
     environment:
-      - JAVA_OPTS=${JAVA_OPTS:--XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4096m -XX:-UseGCOverheadLimit}
+      - JAVA_OPTS=${java_opts}
+      - POSTGRES_DB=${postgres_db}
       - DHIS2_HOME=/opt/dhis2/config
       - POSTGRES_USER=${POSTGRES_USER:-dhis}
       - POSTGRES_DB=${POSTGRES_DB:-dhis}
@@ -81,7 +88,7 @@ services:
       - ENC_TYPE=${ENC_TYPE:-7z}
       - TZ=${TZ:-Europe/Brussels}
       - ENC_PASS=${ENC_PASS:?ENC_PASS}
-      - DUMP_ARGS=${DUMP_ARGS:--c -O -Fp -T aggregated* -T analytics* -T completeness*} 
+      - DUMP_ARGS=${DUMP_ARGS:--c -O -Fp -T aggregated* -T analytics* -T completeness*}
     restart: always
     depends_on:
       - database
