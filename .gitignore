@@ -4,4 +4,6 @@ dhis2app/
 dhis2db/
 build/
 traefik/acme.json
-image_build.bash
+*.bash
+*.sh
+*.conf
