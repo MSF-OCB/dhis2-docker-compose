@@ -1,0 +1,3 @@
+docker pull msfocbehealth/dhis2-web:8.5.30-2.31.9_a8c4b5d5_LDAP
+docker pull msfocbehealth/dhis2-web:8.5.30-2.32.5_6e3162b7_LDAP
+docker pull msfocbehealth/dhis2-web:8.5.30-2.33.4_55a80592_LDAP
