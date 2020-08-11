@@ -66,11 +66,10 @@ services:
     image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:8.5.30-20f46674-deb}
     labels:
       - "org.msf.description=dhis2-web"
-      - "traefik.docker.network=web"
-      - "traefik.backend=dhis2-web-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}"
-      - "traefik.frontend.rule=Host:${FRONTEND_RULE:-none}"
       - "traefik.enable=true"
-      - "traefik.port=8080"
+      - "traefik.http.routers.dhis2.entrypoints=websecure"
+      - "traefik.http.routers.dhis2.rule=Host(`${FRONTEND_RULE:-none}`)"
+      - "traefik.http.routers.dhis2.tls.certresolver=letsencrypt"
     env_file:
       - .env
     networks:
