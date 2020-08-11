@@ -67,9 +67,9 @@ services:
     labels:
       - "org.msf.description=dhis2-web"
       - "traefik.enable=true"
-      - "traefik.http.routers.dhis2.entrypoints=websecure"
-      - "traefik.http.routers.dhis2.rule=Host(`${FRONTEND_RULE:-none}`)"
-      - "traefik.http.routers.dhis2.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.entrypoints=websecure"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE:-none}`)"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.tls.certresolver=letsencrypt"
     env_file:
       - .env
     networks:
