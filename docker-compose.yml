@@ -66,8 +66,6 @@ services:
     image: ${DHIS2_IMAGE:-msfocbehealth/dhis2-web:8.5.30-20f46674-deb}
     labels:
       - "org.msf.description=dhis2-web"
-      - "traefik.enable=true"
-      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE:-none}`)"
     env_file:
       - .env
     networks:

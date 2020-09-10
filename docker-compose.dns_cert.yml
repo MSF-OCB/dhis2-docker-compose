@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+
+  web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE}.ocb.msf.org`)"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.tls.certresolver=letsencrypt_dns"
+

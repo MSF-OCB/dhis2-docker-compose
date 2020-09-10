@@ -1,0 +1,12 @@
+version: '3.5'
+
+services:
+
+  web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE}.ocb.msf.org`,`${FRONTEND_RULE}.msf.be`)"
+      - "traefik.http.middlewares.dhis2-redirect.redirectregex.regex=^https://${FRONTEND_RULE}.msf.be/(.*)"
+      - "traefik.http.middlewares.dhis2-redirect.redirectregex.replacement=https://${FRONTEND_RULE}.ocb.msf.org/$${1}"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=dhis2-redirect@docker"
+
