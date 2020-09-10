@@ -77,6 +77,9 @@ services:
       - type: volume
         source: tomcat_log
         target: /opt/dhis2/config/logs
+      - type: volume
+        source: dhis2_app
+        target: /opt/dhis2/config/files/apps/
     environment:
       - JAVA_OPTS=${JAVA_OPTS:--XX:+UseG1GC -XX:+UseStringDeduplication -Xms512m -Xmx4096m -XX:-UseGCOverheadLimit -XX:MaxHeapFreeRatio=30 -XX:MinHeapFreeRatio=10}
       - DHIS2_HOME=/opt/dhis2/config
@@ -132,6 +135,8 @@ volumes:
       name: tomcat_log_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
     msfbackups:
       name: dhis2_backups_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
+    dhis2_app:
+        name: dhis2_apps_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
 
 networks:
   web:
