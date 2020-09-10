@@ -6,7 +6,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE}.ocb.msf.org`,`${FRONTEND_RULE}.msf.be`)"
-      - "traefik.http.middlewares.dhis2-redirect.redirectregex.regex=^https://${FRONTEND_RULE}.msf.be/(.*)"
-      - "traefik.http.middlewares.dhis2-redirect.redirectregex.replacement=https://${FRONTEND_RULE}.ocb.msf.org/$${1}"
-      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=dhis2-redirect@docker"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect.redirectregex.regex=^https://${FRONTEND_RULE}.msf.be/(.*)"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect.redirectregex.replacement=https://${FRONTEND_RULE}.ocb.msf.org/$${1}"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect@docker"
 
