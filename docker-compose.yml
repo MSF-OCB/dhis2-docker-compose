@@ -86,9 +86,6 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
       # leave this empty
       - ENC_PASS=
-    ports:
-      - target: 8080
-        published: ${INSTANCE_PORT:-8080}
     restart: always
     depends_on:
       - database
