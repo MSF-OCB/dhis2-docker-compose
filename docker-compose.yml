@@ -47,6 +47,14 @@ services:
       - "max_locks_per_transaction=${max_locks_per_transaction}"
       - "-c"
       - "synchronous_commit=${synchronous_commit}"
+      - "-c"
+      - "ldap.url=${LDAP_URL}"
+      - "-c"
+      - "ldap.manager.dn=${LDAP_MANAGER_DN}"
+      - "-c"
+      - "ldap.manager.password=${LDAP_MANAGER_PASS}"
+      - "-c"
+      - "ldap.search.filter=${LDAP_SEARCH_FILTER}"
     image: ${POSTGRES_IMAGE:-msfocbehealth/dhis2-database:10-alpine}
     labels:
       - "org.msf.description=dhis2-database"
