@@ -103,7 +103,7 @@ services:
       retries: 10
 
   backup:
-    image: msfocbehealth/backup:latest
+    image: ${BACKUP_IMAGE:-docker.pkg.github.com/msf-ocb/backup-service/backup:latest}
     labels:
       - "org.msf.description=backup"
     container_name: dhis2-bkp-${INSTANCE_NAME:?INSTANCE_NAME}-${INSTANCE_TYPE:?INSTANCE_TYPE}
