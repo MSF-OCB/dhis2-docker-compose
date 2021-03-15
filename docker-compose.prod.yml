@@ -14,6 +14,6 @@ services:
       - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect.redirectregex.replacement=https://prod.hmis.ocb.msf.org/$${1}"
       - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect.redirectregex.permanent=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=
-          dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect@docker,
-          dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect@docker"
+          dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-ocb-redirect@docker,
+          dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect@docker"
 
