@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+
+  web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.entrypoints=websecure"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`prod.hmis.ocb.msf.org`,`hmis.ocb.msf.org`,`hmis.msf.be`)"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-ocb-redirect.redirectregex.regex=^https://hmis.ocb.msf.org/(.*)"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-ocb-redirect.redirectregex.replacement=https://prod.hmis.ocb.msf.org/$${1}"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-ocb-redirect.redirectregex.permanent=true"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect.redirectregex.regex=^https://hmis.msf.be/(.*)"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect.redirectregex.replacement=https://prod.hmis.ocb.msf.org/$${1}"
+      - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect.redirectregex.permanent=true"
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=
+          dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect@docker,
+          dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect@docker"
+
