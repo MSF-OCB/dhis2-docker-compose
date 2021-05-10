@@ -3,9 +3,16 @@ version: '3.7'
 services:
 
   web:
+    networks:
+      - web
+      - default
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.entrypoints=websecure"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE}.ocb.msf.org`)"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.tls.certresolver=letsencrypt_dns"
+
+networks:
+  web:
+    external: true
 
