@@ -62,7 +62,7 @@ services:
       - type: volume
         source: dhis2_db_data
         target: /var/lib/postgresql/data
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: "pg_isready -h database -U ${POSTGRES_USER:-dhis} -p 5432 -d ${POSTGRES_DB:-dhis}"
       interval: 30s
@@ -76,9 +76,6 @@ services:
       - "org.msf.description=dhis2-web"
     env_file:
       - .env
-    networks:
-      - web
-      - default
     volumes:
       - type: volume
         source: tomcat_log
@@ -94,7 +91,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD}
       # leave this empty
       - ENC_PASS=
-    restart: always
+    restart: unless-stopped
     depends_on:
       - database
     healthcheck:
@@ -121,7 +118,7 @@ services:
       - TZ=${TZ:-Europe/Brussels}
       - ENC_PASS=${ENC_PASS:?ENC_PASS}
       - DUMP_ARGS=${DUMP_ARGS:--c -O -Fp -T aggregated* -T analytics* -T completeness*}
-    restart: always
+    restart: unless-stopped
     depends_on:
       - database
     healthcheck:
@@ -141,6 +138,3 @@ volumes:
     dhis2_app:
         name: dhis2_apps_${INSTANCE_NAME:?INSTANCE_NAME}_${INSTANCE_TYPE:?INSTANCE_TYPE}
 
-networks:
-  web:
-    external: true

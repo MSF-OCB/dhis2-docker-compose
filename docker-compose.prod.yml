@@ -3,6 +3,9 @@ version: '3.7'
 services:
 
   web:
+    networks:
+      - web
+      - default
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.entrypoints=websecure"
@@ -16,4 +19,8 @@ services:
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=
           dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-ocb-redirect@docker,
           dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-be-redirect@docker"
+
+networks:
+  web:
+    external: true
 

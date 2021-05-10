@@ -3,6 +3,9 @@ version: '3.7'
 services:
 
   web:
+    networks:
+      - web
+      - default
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.entrypoints=websecure"
@@ -11,4 +14,8 @@ services:
       - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect.redirectregex.replacement=https://${FRONTEND_RULE}.ocb.msf.org/$${1}"
       - "traefik.http.middlewares.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect.redirectregex.permanent=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.middlewares=dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}-redirect@docker"
+
+networks:
+  web:
+    external: true
 
