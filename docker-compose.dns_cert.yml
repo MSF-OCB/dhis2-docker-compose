@@ -9,7 +9,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.entrypoints=websecure"
-      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=Host(`${FRONTEND_RULE}.ocb.msf.org`)"
+      # We add a second domain, identifying the project, to avoid LE rate-limiting
+      # when using the exact same domain name for too many locations.
+      # The current limit is 5/week for the exact same combination of domains,
+      # including renewals.
+      # https://letsencrypt.org/docs/rate-limits/
+      - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.rule=
+        Host(`${FRONTEND_RULE:-_}.ocb.msf.org`,
+             `${INSTANCE_NAME:-unknown}-${INSTANCE_TYPE:-na}.requesting-location-identifier.automatic-certificate-validation.ocb.msf.org`)"
       - "traefik.http.routers.dhis2_${INSTANCE_NAME}_${INSTANCE_TYPE}.tls.certresolver=letsencrypt_dns"
 
 networks:
